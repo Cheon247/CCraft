@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package plugin.listeners.npc;
+package plugin.trait.Worker;
 
+import net.aufdemrand.sentry.SentryTrait;
 import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import plugin.main.CCraft;
-import plugin.trait.Worker.WorkerTrait;
 import plugin.util.NPCTool;
 
 /**
@@ -38,18 +39,22 @@ public class WorkerListener implements Listener {
         final NPC worker = ndbe.getNPC();
         final WorkerTrait wt = worker.getTrait(WorkerTrait.class);
 
-        switch (wt.currentState) {
-            case FLEEING:
-                break;
-            case GOING_TO_WORK:
+        // Check if you must reteat, if there is no location to retreat to, the unit will be forced to engage combat
+        if(wt.getCurrentState() != WorkerState.RETREAT
+                && wt.getCurrentState() != WorkerState.IN_COMBAT
+                && wt.getCurrentState() != WorkerState.FLEE) {
+            if(wt.isAvoidingCombat()) {
+                wt.setCurrentState(WorkerState.RETREAT);
                 wt.goToClosestRetreatLocation(ndbe.getDamager());
-                break;
-            case GOING_HOME:
-                wt.goToClosestRetreatLocation(ndbe.getDamager());
-                break;
-            default:
-                break;
-        }
+            } else {
+                if(worker.hasTrait(SentryTrait.class) && ndbe.getDamager() instanceof LivingEntity) {
+                    LivingEntity damager = (LivingEntity) ndbe.getDamager();
+                    SentryTrait st = worker.getTrait(SentryTrait.class);
+                    st.getInstance().setTarget(damager, true);
+                    wt.setCurrentState(WorkerState.IN_COMBAT);
+                }
+            }
+        } 
     }
 
 }

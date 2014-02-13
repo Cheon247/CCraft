@@ -41,13 +41,7 @@ public class WorkerStateChangeEvent extends NPCEvent {
         return handlers;
     }
 
-    /**
-     * Gets a copy of the worker who's state was changed
-     * @return copy of the worker
-     */
-    public final NPC getWorker() {
-        return worker.clone();  // To ensure the worker still has the trait when this event was invoked
-    }
+    
 
     
     

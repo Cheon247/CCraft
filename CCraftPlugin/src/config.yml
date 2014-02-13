@@ -1,0 +1,20 @@
+
+worlds:
+    world: BukkitCraft
+events:
+    npc:
+        # 0 NPC respawns at owner's bed location or the spawn
+        # 1 NPC respawns but lose all of its experience
+        # 2 NPC DIES (HARDCORE)
+        death: 0
+
+limits:
+    # sets the max number of npc's owned by a player
+    # 0 means infinite
+    popcap: 5
+    # sets the amount of safelocations that can be stored on one npc
+    # By default the owners house (bed spawn location) and the npc's house (bed location) are a safelocation, these don't influence this limit
+    # 0 means infinite safelocations
+    # WARNING HIGH limits require a larger storage!
+    # WARNING changing this setting to a lower number in late game will cause the npc's to forget the overflowing amount
+    safelocation_limit: 5

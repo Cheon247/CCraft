@@ -1,0 +1,7 @@
+name: CCraft
+main: plugin.main.CCraft
+version: 1.0
+commands:
+  worker:
+    description: Spawns a worker
+    usage: /<command> create [workertype]

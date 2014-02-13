@@ -5,13 +5,10 @@
  */
 package plugin.trait.Worker;
 
+import java.util.TreeSet;
 import plugin.event.worker.WorkerInCombatEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.scene.shape.Arc;
 import net.citizensnpcs.api.ai.goals.MoveToGoal;
-import net.citizensnpcs.api.ai.tree.Behavior;
-import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.Owner;
 import org.bukkit.Bukkit;
@@ -19,6 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import plugin.event.worker.WorkerStateChangeEvent;
+import plugin.event.world.TIME;
+import plugin.util.Debug;
 
 /**
  *
@@ -26,86 +25,17 @@ import plugin.event.worker.WorkerStateChangeEvent;
  */
 public abstract class WorkerTrait extends Trait {
 
-    private Location home;
+    @Persist private SafeLocation home;
+    @Persist protected boolean avoidingCombat = true;
+    @Persist private WorkerState currentState;
+    @Persist private TreeSet<SafeLocation> safeLocations;
+    
 
-    public enum WorkerState {
-        SLEEPING,
-        IDLE,
-        GOING_TO_WORK,
-        WORKING,
-        GOING_HOME,
-        IN_COMBAT,
-        FLEEING
-    }
 
-    public WorkerState currentState;
-
-    private final List<Location> safeLocations;
-
-    public final Player getOwner() {
-        if (!getNPC().hasTrait(Owner.class)) {
-            throw new IllegalStateException("no owner");
-        }
-        return getNPC().getEntity().getServer().getPlayer(getNPC().getTrait(Owner.class).getOwner());
-    }
 
     public WorkerTrait() {
         super("worker");
-        safeLocations = new ArrayList<>();
-        if (home != null) {
-            safeLocations.add(home);
-        }
-        if (getOwner().getBedSpawnLocation() != null) {
-            safeLocations.add(getOwner().getBedSpawnLocation());
-        }
-    }
-
-    public boolean addSafeLocation(Location location) {
-        if (safeLocations.contains(location) || location.equals(getOwner().getBedSpawnLocation())) {
-            return false;
-        }
-        safeLocations.add(location);
-        return true;
-    }
-
-    public boolean removeSafeLocation(Location location) {
-        if(location.equals(getOwner().getBedSpawnLocation())) return false;
-        return safeLocations.remove(location);
-    }
-
-    public final Location getClosestSafeLocation() {
-
-        Location npcLocation = npc.getEntity().getLocation();
-        if (safeLocations.isEmpty()) {
-            return null;
-        }
-        if (safeLocations.size() == 1) {
-            return safeLocations.get(0); // only one location...
-        }
-        Location currentTarget = safeLocations.get(0);
-
-        for (int i = 1; i < safeLocations.size(); i++) {
-            if (npcLocation.distance(safeLocations.get(i)) < npcLocation.distance(currentTarget)) {
-                currentTarget = safeLocations.get(i);
-            }
-        }
-        if(npcLocation.distance(getOwner().getBedSpawnLocation()) < npcLocation.distance(currentTarget))
-            currentTarget = getOwner().getBedSpawnLocation();
-        
-        return currentTarget;
-    }
-
-    public void setHome(Location location) {
-        if (home != null && safeLocations.contains(home)) {
-            safeLocations.remove(home);
-        }
-        this.home = location;
-        safeLocations.add(home);
-    }
-
-
-    public Location getHome() {
-        return home;
+        safeLocations = new TreeSet<>();
     }
 
     @Override
@@ -116,30 +46,143 @@ public abstract class WorkerTrait extends Trait {
 
     @Override
     public void onSpawn() {
-        setState(WorkerState.IDLE);
+        forgetOverflowingAmount();
+        takeDefaultAction();
+    }
 
-        if (isNight()) {
-            setState(WorkerState.GOING_HOME);
+    public final boolean addSafeLocation(Location location) {
+        if(Bukkit.getPluginManager().isPluginEnabled("CCraft")) throw new AssertionError("CCraft wasn't enabled");
+        int limit = Bukkit.getPluginManager().getPlugin("CCraft").getConfig().getInt("limits.safelocation_limit");
+        
+        if(limit != 0 && limit == safeLocations.size()) {
+            Debug.info("Safelocation limit reached for " + npc.getName());
+            return false; // LIMIT REACHED!
+        }
+        
+        boolean added = safeLocations.add(new SafeLocation(location, npc));
+        Debug.info(npc.getName() + ": added safelocation was " + added);
+        return added;
+    }
 
+    public final boolean removeSafeLocation(Location location) {
+        boolean removed = safeLocations.remove(new SafeLocation(location, npc));
+        Debug.info(npc.getName() + ": remove safelocation was " + removed);
+        return removed;
+    }
+    
+    public final void clearSafeLocations() {
+        Debug.info(npc.getName() + ": clearing safelocations");
+        safeLocations.clear();
+    }
+
+    public final Location getClosestSafeLocation() {
+        SafeLocation target = null;
+
+        if (!safeLocations.isEmpty()) {
+            safeLocations = new TreeSet<>(safeLocations); // performs insertion sort
+            target = safeLocations.first();     // first element is closest
         }
 
+        if (home != null && (target == null || target.compareTo(home) == 1)) {
+            target = home;
+        } else if (getOwner().getBedSpawnLocation() != null && (target == null || target.compareTo(getOwner().getBedSpawnLocation()) == 1)) {
+            target = new SafeLocation(getOwner().getBedSpawnLocation(), npc);
+        }
+        Debug.info(npc.getName() + ": closest safelocation was " + target);
+        return target;
+    }
+    
+    private void forgetOverflowingAmount() {
+        if(Bukkit.getPluginManager().isPluginEnabled("CCraft")) throw new AssertionError("CCraft wasn't enabled");
+            
+        int limit = Bukkit.getPluginManager().getPlugin("CCraft").getConfig().getInt("limits.safelocation_limit");
+        if(safeLocations.size() > limit && limit != 0) {
+            Debug.info("safelocation limit was reached, safelocations with the highest distance");
+            safeLocations = new TreeSet<>(safeLocations);
+            while(safeLocations.size() > limit && safeLocations.size() > 1) {
+                safeLocations.pollLast(); // remove the highest element
+            }
+        }   
+        
     }
 
-    public final void setState(WorkerState newState) {
-        this.currentState = newState;
-        Bukkit.getPluginManager().callEvent(new WorkerStateChangeEvent(npc));
+    /**
+     * Will take the defaultAction according to the TIME 
+     */
+    public final void takeDefaultAction() {
+        TIME currentTime = TIME.serverTicksToTIME(getNPC().getEntity().getWorld().getTime());
+        switch (currentTime) {
+            case SUNRISE:
+                defaultSunRiseAction();
+                break;
+            case MORNING:
+                defaultMorningAction();
+                break;
+            case MIDDAY:
+                defaultMiddayAction();
+                break;
+            case DAY:
+                defaultDayAction();
+                break;
+            case LATE_DAY:
+                defaultLateDayAction();
+                break;
+            case SUNSET:
+                defaultSunsetAction();
+                break;
+            case NIGHT:
+                defaultNightAction();
+                break;
+            default:
+                throw new UnsupportedOperationException(currentTime + " not supported");
+        }
     }
 
-    public boolean isNight() {
-        return (getNPC().getEntity().getWorld().getTime() > 12500);
-    }
+    /**
+     * Default action to take on sunrise, also called on npc spawn
+     */
+    protected abstract void defaultSunRiseAction();
 
+    /**
+     * Default action to take when TIME is MORNING, also called on npc spawn
+     */
+    protected abstract void defaultMorningAction();
+
+    /**
+     * Default action to take when TIME is MIDDAY, also called on npc spawn
+     */
+    protected abstract void defaultMiddayAction();
+
+    /**
+     * Default action to take when TIME is DAY, also called on npc spawn
+     */
+    protected abstract void defaultDayAction();
+
+    /**
+     * Default action to take when TIME is LATE_DAY, also called on npc spawn
+     */
+    protected abstract void defaultLateDayAction();
+
+    /**
+     * Default action to take when TIME is SUNSET, also called on npc spawn
+     */
+    protected abstract void defaultSunsetAction();
+
+    /**
+     * Default action to take when TIME is NIGHT, also called on npc spawn
+     */
+    protected abstract void defaultNightAction();
+
+    /**
+     * An npc is retreating when it has an attacker, the NPC becomes in fleeing state and will ignore all other goals
+     * @param attacker 
+     */
     public void goToClosestRetreatLocation(Entity attacker) {
         final WorkerTrait wt = npc.getTrait(WorkerTrait.class);
         Location retreat = wt.getClosestSafeLocation();
         if (retreat == null) {
-            npc.getTrait(WorkerTrait.class).currentState = WorkerState.IN_COMBAT;
-            wt.getOwner().sendMessage(getName() + ": i'm fighting for my life!");
+            setCurrentState(WorkerState.FLEE);
+            wt.getOwner().sendMessage(getName() + ": i'm fleeing!");
             Bukkit.getPluginManager().callEvent(new WorkerInCombatEvent(npc, attacker));
             return;
         }
@@ -150,8 +193,8 @@ public abstract class WorkerTrait extends Trait {
             }
         }
         MoveToGoal retreatGoal = new MoveToGoal(this.getNPC(), retreat);
-        npc.getDefaultGoalController().addGoal(retreatGoal, 100);
-        npc.getTrait(WorkerTrait.class).setState(WorkerState.FLEEING);
+        npc.getDefaultGoalController().addGoal(retreatGoal, WorkerGoalPriority.TOO_DAMN_HIGH);
+        npc.getTrait(WorkerTrait.class).setCurrentState(WorkerState.RETREAT);
     }
 
     public boolean goToClosestSafeLocation() {
@@ -161,9 +204,60 @@ public abstract class WorkerTrait extends Trait {
             return false;
         }
         MoveToGoal retreatGoal = new MoveToGoal(this.getNPC(), safe);
-        npc.getDefaultGoalController().addGoal(retreatGoal, 100);
-        npc.getTrait(WorkerTrait.class).setState(WorkerState.FLEEING);
+        npc.getDefaultGoalController().addGoal(retreatGoal, WorkerGoalPriority.VERY_HIGH);
+        npc.getTrait(WorkerTrait.class).setCurrentState(WorkerState.ASSIGNED_MOVE_BY_PLAYER);
+
         return true;
     }
 
+    public final WorkerState getCurrentState() {
+        return currentState;
+    }
+
+    public final void setCurrentState(WorkerState newState) {
+        this.currentState = newState;
+        Bukkit.getPluginManager().callEvent(new WorkerStateChangeEvent(npc));
+    }
+
+    public final void setHome(Location location) {
+        if (home != null && safeLocations.contains(home)) {
+            safeLocations.remove(home);
+        }
+        this.home = new SafeLocation(location, npc);
+        safeLocations.add(home);
+    }
+
+    public final Location getHome() {
+        return home;
+    }
+    
+        public final Player getOwner() {
+        if (!getNPC().hasTrait(Owner.class)) {
+            throw new IllegalStateException("no owner");
+        }
+        return getNPC().getEntity().getServer().getPlayer(getNPC().getTrait(Owner.class).getOwner());
+    }
+
+
+    public void setHome(SafeLocation home) {
+        this.home = home;
+    }
+
+    public boolean isAvoidingCombat() {
+        return avoidingCombat;
+    }
+
+    public void setAvoidingCombat(boolean avoidingCombat) {
+        this.avoidingCombat = avoidingCombat;
+    }
+
+    public TreeSet<SafeLocation> getSafeLocations() {
+        return safeLocations;
+    }
+
+    public void setSafeLocations(TreeSet<SafeLocation> safeLocations) {
+        this.safeLocations = safeLocations;
+    }
+        
+    
 }

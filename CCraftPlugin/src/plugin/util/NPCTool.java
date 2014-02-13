@@ -63,16 +63,12 @@ public class NPCTool {
 
     /**
      * Dissmisses the sentries that were guarding this target
-     *
-     * @param target The target given to guard
      */
-    public void dissmissSentries(Player target) {
+    public void dissmissSentries() {
         for (NPC npc : npcRegistry.sorted()) {
             if (npc.hasTrait(SentryTrait.class)) {
                 SentryInstance si = npc.getTrait(SentryTrait.class).getInstance();
-                if (si.getGuardTarget() == target) {
-                    npc.getTrait(SentryTrait.class).getInstance().setGuardTarget(null, true);
-                }
+                npc.getTrait(SentryTrait.class).getInstance().setGuardTarget(null, true);
             }
         }
 
@@ -95,6 +91,4 @@ public class NPCTool {
         npcSelector.select(owner, selected);
     }
 
-    
-    
 }

@@ -7,17 +7,21 @@ package plugin.main;
 
 import java.util.Arrays;
 import java.util.logging.Level;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import plugin.command.WorkerCommands;
 import plugin.event.npc.NPCCombatEvents;
 import plugin.event.world.WorldListener;
 
 import plugin.listeners.item.NPCEggListener;
 import plugin.listeners.npc.NPCInteractionListener;
 import plugin.listeners.npc.NPCOwnerListener;
-import plugin.listeners.npc.WorkerListener;
+import plugin.trait.Worker.WorkerListener;
+import plugin.trait.lumberer.LumbererTrait;
 import plugin.util.Debug;
 
 /**
@@ -31,6 +35,8 @@ public final class CCraft extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Citizens") == null || getServer().getPluginManager().getPlugin("Citizens").isEnabled() == false) {
             getLogger().log(Level.SEVERE, "Citizens 2.0 not found or not enabled");
             getServer().getPluginManager().disablePlugin(this);
+            
+            getCommand("worker").setExecutor(new WorkerCommands(this));
             return;
         }
         
@@ -41,6 +47,8 @@ public final class CCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new NPCCombatEvents(this), this);
         this.getServer().getPluginManager().registerEvents(new WorkerListener(this), this);
         this.getServer().getPluginManager().registerEvents(new WorldListener(this), this);
+        
+//        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(LumbererTrait.class));
         RecipeLoader.load(this);
     }
 
@@ -55,10 +63,11 @@ public final class CCraft extends JavaPlugin {
 
         if (sender instanceof Player) {
             switch (theCommand) {
-                case "time":
-                    sender.sendMessage("Hello TIME!");
-                    Debug.info("Args!: " + Arrays.toString(args));
-
+                case "worker":
+                    Debug.info("worker command!");
+                    Debug.info(args.length + "");
+                    Debug.info(Arrays.toString(args));
+                    
                     return true;
                 default:
                     return false;
