@@ -4,4 +4,4 @@ version: 1.0
 commands:
   worker:
     description: Spawns a worker
-    usage: /<command> create [workertype]
+    usage: /<command> create [workertype][name]

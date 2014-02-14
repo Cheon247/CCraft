@@ -6,7 +6,6 @@
 package plugin.command;
 
 import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.event.CommandSenderCreateNPCEvent;
 import net.citizensnpcs.api.event.PlayerCreateNPCEvent;
 import net.citizensnpcs.api.npc.NPC;
@@ -19,9 +18,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import plugin.interaction.SentryInteraction;
 import plugin.main.CCraft;
-import plugin.trait.lumberer.LumbererTrait;
+import plugin.trait.lumberer.LumbererJob;
+import plugin.trait.worker.WorkerTrait;
 import plugin.util.NPCTool;
 
 /**
@@ -60,7 +59,7 @@ public class WorkerCommands implements CommandExecutor {
     }
 
     private boolean processCreate(Player sender, String[] args) {
-        if (args.length < 2) {
+        if (args.length <= 2) {
             sender.sendMessage("too few arguments");
             return false;
         }
@@ -77,9 +76,10 @@ public class WorkerCommands implements CommandExecutor {
         Location loc = sender.getLocation();
         npc.spawn(loc);
         npc.getTrait(MobType.class).setType(EntityType.PLAYER);
+        npc.addTrait(WorkerTrait.class);
         
         switch(trait) {
-            case "lumberer" : npc.addTrait(LumbererTrait.class); break;
+            case "lumberer" : npc.getTrait(WorkerTrait.class).setJob(new LumbererJob(npc)); break;
             default: sender.sendMessage("unknown trait: " + trait);
         }
 

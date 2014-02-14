@@ -12,7 +12,7 @@ import net.citizensnpcs.api.event.NPCEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
-import plugin.trait.Worker.WorkerTrait;
+import plugin.trait.worker.WorkerTrait;
 
 /**
  *

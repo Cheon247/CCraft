@@ -17,6 +17,7 @@ import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.npc.NPCSelector;
 import org.bukkit.entity.Player;
 import plugin.main.CCraft;
+import plugin.trait.worker.WorkerTrait;
 
 /**
  *
@@ -50,6 +51,16 @@ public class NPCTool {
         }
         return npcs;
     }
+    
+    public List<NPC> getWorkers() {
+        List<NPC> npcs = new ArrayList<>();
+        for (NPC npc : npcRegistry.sorted()) {
+            if (npc.hasTrait(WorkerTrait.class)) {
+                npcs.add(npc);
+            }
+        }
+        return npcs;
+    }
 
     public List<NPC> getSentries(Player owner) {
         List<NPC> npcs = new ArrayList<>();
@@ -60,6 +71,7 @@ public class NPCTool {
         }
         return npcs;
     }
+    
 
     /**
      * Dissmisses the sentries that were guarding this target
@@ -90,5 +102,7 @@ public class NPCTool {
     public void selectNPC(Player owner, NPC selected) {
         npcSelector.select(owner, selected);
     }
+    
+    
 
 }
