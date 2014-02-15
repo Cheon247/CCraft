@@ -103,6 +103,8 @@ public class NPCTool {
         npcSelector.select(owner, selected);
     }
     
-    
+    public NPC getSelected(Player owner) {
+        return npcSelector.getSelected(owner);
+    }
 
 }

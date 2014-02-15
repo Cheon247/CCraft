@@ -27,8 +27,12 @@ public class Materials {
     public static final Set<Material> HELMETS;
     
     public static final Set<Material> SWORDS;
+    
+  
 
     static {
+        
+        
         // TOOLS
         AXES = new HashSet<>();
         AXES.addAll(Arrays.asList(

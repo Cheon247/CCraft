@@ -1,6 +1,4 @@
 
-worlds:
-    world: BukkitCraft
 events:
     npc:
         # 0 NPC respawns at owner's bed location or the spawn

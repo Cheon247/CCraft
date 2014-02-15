@@ -28,7 +28,7 @@ public abstract class WorkerJob {
         return npc;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
@@ -103,5 +103,7 @@ public abstract class WorkerJob {
     
     protected abstract void onStateChanged();
         
+    
+    
     
 }

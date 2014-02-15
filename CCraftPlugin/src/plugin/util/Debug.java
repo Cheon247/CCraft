@@ -5,6 +5,7 @@
  */
 package plugin.util;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -22,7 +23,7 @@ public class Debug {
 
     public static void info(String message) {
         if (debugmode) {
-            logger.info(message);
+            logger.log(Level.INFO, "[CCraft]:{0}", message);
         }
     }
 

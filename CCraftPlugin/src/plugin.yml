@@ -5,3 +5,9 @@ commands:
   worker:
     description: Spawns a worker
     usage: /<command> create [workertype][name]
+  worker:
+    description: Gets the job of the selected worker
+    usage: /<command> job
+  worker:
+    description: Gets the job of the selected worker
+    usage: /<command> find [material][threshold]
