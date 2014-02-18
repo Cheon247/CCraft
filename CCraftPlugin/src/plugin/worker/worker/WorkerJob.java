@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package plugin.trait.worker;
+package plugin.worker.worker;
 
 import net.citizensnpcs.api.npc.NPC;
 import plugin.event.world.TIME;

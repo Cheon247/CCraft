@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package plugin.trait.worker;
+package plugin.worker.worker;
 
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;

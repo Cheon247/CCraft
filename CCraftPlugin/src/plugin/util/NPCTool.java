@@ -17,7 +17,7 @@ import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.npc.NPCSelector;
 import org.bukkit.entity.Player;
 import plugin.main.CCraft;
-import plugin.trait.worker.WorkerTrait;
+import plugin.worker.worker.WorkerTrait;
 
 /**
  *

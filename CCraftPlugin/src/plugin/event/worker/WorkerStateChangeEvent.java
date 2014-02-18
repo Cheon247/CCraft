@@ -9,7 +9,7 @@ package plugin.event.worker;
 import net.citizensnpcs.api.event.NPCEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.event.HandlerList;
-import plugin.trait.worker.WorkerTrait;
+import plugin.worker.worker.WorkerTrait;
 
 /**
  *

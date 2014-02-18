@@ -11,3 +11,13 @@ commands:
   worker:
     description: Gets the job of the selected worker
     usage: /<command> find [material][threshold]
+  cctest:
+      description: moves an npc to the player
+      usage: /<command> moveto me
+  cctest:
+      description: moves an npc to the player with given speed
+      usage: /<command> moveto me [speed]   
+  cctest:
+      description: moves an npc to the player with given speed
+      usage: /<command> make [jobname]  
+    

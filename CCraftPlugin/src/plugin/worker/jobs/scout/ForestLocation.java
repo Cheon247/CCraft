@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package plugin.trait.discoverer;
+package plugin.worker.jobs.scout;
 
 import org.bukkit.Location;
 import org.bukkit.World;
