@@ -6,15 +6,11 @@
 package plugin.command;
 
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdk.nashorn.internal.runtime.regexp.joni.SearchAlgorithm;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,9 +20,6 @@ import plugin.main.CCraft;
 import plugin.util.Debug;
 import plugin.worker.actions.WorkerMovement;
 import plugin.util.NPCTool;
-import plugin.worker.actions.WorkerExplore;
-import plugin.worker.jobs.scout.FieldPaper;
-import plugin.worker.jobs.villageelder.assignment.SearchAssignment;
 import plugin.worker.worker.Job;
 import plugin.worker.worker.JobFactory;
 import plugin.worker.worker.WorkerTrait;
@@ -147,7 +140,6 @@ public class TestCommands implements CommandExecutor {
     private boolean testExplore(Player player) {
         NPC npc = npcTool.getSelected(player);
         if(npc != null) {
-            SearchAssignment sa = new SearchAssignment(npc.getEntity().getLocation());
            
             return true;
         }
