@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package plugin.worker.jobs.scout;
+package plugin.util.biome;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import plugin.util.Debug;
  *
  * @author Chingo
  */
-public final class ForestScore {
+public final class BiomeUtil {
 
     private static final HashSet<Biome> NO;
     private static final HashSet<Biome> VERY_LOW;
