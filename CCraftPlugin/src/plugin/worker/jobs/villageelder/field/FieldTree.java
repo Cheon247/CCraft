@@ -17,10 +17,11 @@ public class FieldTree {
     private static final int CHUNK_SIZE = 16;
 //    private final String worldid;
     private FieldTree parent;
-    private FieldTree northEast;
-    private FieldTree southEast;
-    private FieldTree northWest;
-    private FieldTree southWest;
+    private FieldTree[] subfields = new FieldTree[4];
+//    private FieldTree northEast;
+//    private FieldTree southEast;
+//    private FieldTree northWest;
+//    private FieldTree southWest;
     private final int MIN_SIZE; //
     private final int DIMENSION;
     private final int x;
@@ -52,10 +53,10 @@ public class FieldTree {
         this.z = z;
 
         if (dimension != minSize) {
-            this.southWest = new FieldTree(x, z, minSize, dimension / 2, this);
-            this.northWest = new FieldTree(x, z + dimension / 2, minSize, dimension / 2, this);
-            this.northEast = new FieldTree(x + dimension / 2, z + dimension / 2, minSize, dimension / 2, this);
-            this.southEast = new FieldTree(x + dimension / 2, z, minSize, dimension / 2, this);
+            this.subfields[0] = new FieldTree(x, z, minSize, dimension / 2, this);
+            this.subfields[1] = new FieldTree(x, z + dimension / 2, minSize, dimension / 2, this);
+            this.subfields[2] = new FieldTree(x + dimension / 2, z + dimension / 2, minSize, dimension / 2, this);
+            this.subfields[3] = new FieldTree(x + dimension / 2, z, minSize, dimension / 2, this);
         }
     }
 
@@ -68,14 +69,14 @@ public class FieldTree {
         this.parent = parent;
 
         if (dimension != minSize) {
-            this.southWest = new FieldTree(x, z, minSize, dimension / 2, this);
-            this.northWest = new FieldTree(x, z + dimension / 2, minSize, dimension / 2, this);
-            this.northEast = new FieldTree(x + dimension / 2, z + dimension / 2, minSize, dimension / 2, this);
-            this.southEast = new FieldTree(x + dimension / 2, z, minSize, dimension / 2, this);
+            this.subfields[0] = new FieldTree(x, z, minSize, dimension / 2, this);
+            this.subfields[1] = new FieldTree(x, z + dimension / 2, minSize, dimension / 2, this);
+            this.subfields[2] = new FieldTree(x + dimension / 2, z + dimension / 2, minSize, dimension / 2, this);
+            this.subfields[3] = new FieldTree(x + dimension / 2, z, minSize, dimension / 2, this);
         }
     }
 
-    protected void assign() {
+    private void assign() {
         if (this.status != STATUS.PROCESSING) {
             this.status = STATUS.PROCESSING;
             if (parent != null) {
@@ -84,7 +85,7 @@ public class FieldTree {
         }
     }
 
-    protected void complete() {
+    private void complete() {
         if (hasChildren()) {
             boolean complete = true;
             for (FieldTree ft : getFields()) {
@@ -95,10 +96,7 @@ public class FieldTree {
             }
             if (complete) {
                 this.status = STATUS.COMPLETE;
-                this.northEast = null;
-                this.northWest = null;
-                this.southWest = null;
-                this.southEast = null;
+                this.subfields = null;
                 parent.complete();
             }
         } else {
@@ -107,6 +105,10 @@ public class FieldTree {
         }
     }
 
+    /**
+     * Gets the current status of a field
+     * @return The status
+     */
     public STATUS getStatus() {
         return status;
     }
@@ -123,25 +125,32 @@ public class FieldTree {
         return DIMENSION;
     }
 
-    public boolean hasDimension(int x, int z, int dimension) {
-        if (dimension < MIN_SIZE) {
-            throw new IllegalArgumentException("dimension smaller than " + MIN_SIZE);
-        }
-
-        if (this.DIMENSION == dimension) {
-            return this.x == x && this.z == z;
-        } else {
-            for (FieldTree f : getFields()) {
-                if (f.hasDimension(x, z, dimension)) {
-                    return true;
-                }
+    /**
+     * Checks if this field tree or its children have the requested field
+     * @param field The field to perform the check 
+     * @return true when either this is the field or a child has the field
+     */
+    public boolean hasField(FieldTree field) {
+        if(this.equals(field)) {
+            return true;
+        } else if(hasChildren()) {
+            for(FieldTree f : getFields()) {
+                if(f.hasField(field)) return true;
             }
+            return false;
+        } else {
             return false;
         }
     }
 
-    public FieldTree poll(int size) {
-        FieldTree tree = pop(size);
+    /**
+     * polls a requested size, when a field was found it, it's state will change to assigned
+     * @param dimension the dimension of this field
+     * @return A field or null when no field was found
+     * also see {@link see grow()}
+     */
+    public FieldTree pollField(int dimension) {
+        FieldTree tree = peek(dimension);
         if (tree != null) {
             tree.assign();
         }
@@ -149,80 +158,48 @@ public class FieldTree {
         return tree;
     }
 
+
+    
     /**
      * Determines wheter a tree has children
      *
      * @return
      */
     public boolean hasChildren() {
-        return southEast != null;
+        return subfields[0] != null;
     }
 
-    /**
-     * Call this when poll return null, but the tree isnt big enough
-     * @return 
-     */
-    public FieldTree grow() {
-        System.out.println("tree was has to grow");
-        FieldTree nw = northWest;
-        FieldTree ne = northEast;
-        FieldTree se = southEast;
-        FieldTree sw = southWest;
-        
-        FieldTree tree = new FieldTree(this.x - DIMENSION, this.z - DIMENSION, MIN_SIZE, DIMENSION * 2);
-        tree.setDimension(nw);
-        tree.setDimension(ne);
-        tree.setDimension(se);
-        tree.setDimension(sw);
-        
-        return tree;
-    }
-    
-    FieldTree getNorthEast() {
-        return northEast;
-    }
-    
-    FieldTree getSouthEast() {
-        return southEast;
-    }
-    FieldTree getNorthWest() {
-        return northWest;
-    }
-    FieldTree getSouthWest() {
-        return southWest;
+    private FieldTree[] getFields() {
+        return subfields;
     }
 
-    private boolean setDimension(FieldTree field) {
-        if (field.getDimension() < MIN_SIZE) {
-            throw new IllegalArgumentException("field tree dimension smaller than " + MIN_SIZE);
+    private boolean equals(FieldTree other) {
+        return other.x == x && other.z == z && other.DIMENSION == DIMENSION;
+    }
+
+    private boolean setField(FieldTree field) {
+        if (field.DIMENSION > this.DIMENSION) {
+            return false;
         }
-
-        if (this.DIMENSION == field.DIMENSION && this.x == field.getX() && this.z == field.getZ()) {
-            this.northEast = field.northEast;
-            this.northWest = field.northWest;
-            this.southEast = field.southEast;
-            this.southWest = field.southWest;
+        if (this.equals(field)) {
+            this.subfields = field.subfields;
             return true;
         } else {
             for (FieldTree f : getFields()) {
-                if (f.hasDimension(field.x, field.z, field.getDimension())) {
+                if (f.setField(field)) {
                     return true;
                 }
             }
             return false;
         }
+
     }
 
-    private FieldTree[] getFields() {
-        FieldTree[] fields = {northEast, northWest, southEast, southWest};
-        return fields;
-    }
-
-    private FieldTree pop(int size) {
+    private FieldTree peek(int size) {
         if (DIMENSION == size && this.status.getValue() < STATUS_PROCESSING) {
             return this;
         } else if (getLowest() != null) {
-            return getLowest().pop(size);
+            return getLowest().peek(size);
         } else {
             return null;
         }
@@ -261,10 +238,9 @@ public class FieldTree {
     public String toString() {
         String s = DIMENSION + ": X:" + x + " Z:" + z + "status: " + status + "\n";
         if (hasChildren()) {
-            s += "\t" + southWest.toString();
-            s += "\t" + northWest.toString();
-            s += "\t" + northEast.toString();
-            s += "\t" + southEast.toString();
+            for (int i = 0; i < subfields.length; i++) {
+                s += "\t" + subfields[i].toString();
+            }
         } else {
             s = "\t" + s;
         }
@@ -300,11 +276,10 @@ public class FieldTree {
 
     public static void main(String args[]) {
         FieldTree tree = new FieldTree(0, 0, 16, 64);
+        FieldTree t2 = new FieldTree(0, 0, 16, 32);
+        t2.subfields[0].complete();
 
-        for (int i = 0; i < 17; i++) {
-            if(tree.poll(tree.MIN_SIZE) == null) tree = tree.grow();
-        }
-
+        tree.setField(t2);
         System.out.println(tree.toString());
 
         //for (int i = 0; i < 16; i++) {
