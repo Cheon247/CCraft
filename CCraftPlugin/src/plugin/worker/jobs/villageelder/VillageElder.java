@@ -14,6 +14,9 @@ import plugin.worker.worker.Job;
  */
 public class VillageElder implements Job{
 
+
+    
+    
     @Override
     public void onStateChanged() {
         
@@ -23,6 +26,8 @@ public class VillageElder implements Job{
     public void defaultAcion() {
         
     }
+    
+    
 
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package plugin.worker.jobs.villageelder.field;
+package plugin.worker.jobs.villageelder;
 
 /**
  *
@@ -23,9 +23,9 @@ public class FieldTree {
 //    private FieldTree northWest;
 //    private FieldTree southWest;
     private final int MIN_SIZE; //
-    private final int DIMENSION;
-    private final int x;
-    private final int z;
+    private int DIMENSION;
+    private int x;
+    private int z;
     private STATUS status = STATUS.UNTOUCHED;
 
     /**
@@ -107,6 +107,7 @@ public class FieldTree {
 
     /**
      * Gets the current status of a field
+     *
      * @return The status
      */
     public STATUS getStatus() {
@@ -127,15 +128,18 @@ public class FieldTree {
 
     /**
      * Checks if this field tree or its children have the requested field
-     * @param field The field to perform the check 
+     *
+     * @param field The field to perform the check
      * @return true when either this is the field or a child has the field
      */
     public boolean hasField(FieldTree field) {
-        if(this.equals(field)) {
+        if (this.equals(field)) {
             return true;
-        } else if(hasChildren()) {
-            for(FieldTree f : getFields()) {
-                if(f.hasField(field)) return true;
+        } else if (hasChildren()) {
+            for (FieldTree f : getFields()) {
+                if (f.hasField(field)) {
+                    return true;
+                }
             }
             return false;
         } else {
@@ -145,9 +149,9 @@ public class FieldTree {
 
     /**
      * polls a requested size, when a field was found it, it's state will change to assigned
+     *
      * @param dimension the dimension of this field
-     * @return A field or null when no field was found
-     * also see {@link see grow()}
+     * @return A field or null when no field was found also see {@link see grow()}
      */
     public FieldTree pollField(int dimension) {
         FieldTree tree = peek(dimension);
@@ -158,8 +162,22 @@ public class FieldTree {
         return tree;
     }
 
+    public void grow() {
+        FieldTree[] subCopy = getFields();
+        FieldTree newField = new FieldTree(this.x - (this.DIMENSION / 2), this.z - (this.DIMENSION / 2), MIN_SIZE, DIMENSION * 2);
 
-    
+        this.DIMENSION = newField.DIMENSION;
+        this.x = newField.x;
+        this.z = newField.z;
+        this.subfields = newField.subfields;
+
+        for (FieldTree f : subCopy) {
+            this.setField(f);
+        }
+//        assign();
+
+    }
+
     /**
      * Determines wheter a tree has children
      *
@@ -183,6 +201,12 @@ public class FieldTree {
         }
         if (this.equals(field)) {
             this.subfields = field.subfields;
+            if (field.status == STATUS.PROCESSING) {
+                field.assign();
+            } else if (field.status == STATUS.COMPLETE) {
+                field.complete();
+            }
+
             return true;
         } else {
             for (FieldTree f : getFields()) {
@@ -195,6 +219,37 @@ public class FieldTree {
 
     }
 
+//    public float getProgress() {
+//        
+//    }
+    public int getAmountOfFields(int dimension) {
+        if (DIMENSION == dimension) {
+            return 1;
+        } else if (hasChildren()) {
+            int amount = 0;
+            for (int i = 0; i < subfields.length; i++) {
+                amount += subfields[i].getAmountOfFields(dimension);
+            }
+            return amount;
+        } else {
+            return 0;
+        }
+    }
+
+    public int getRemainingAmountOfFields(int dimension) {
+        if (DIMENSION == dimension && this.status == STATUS.UNTOUCHED) {
+            return 1;
+        } else if (hasChildren()) {
+            int amount = 0;
+            for (int i = 0; i < subfields.length; i++) {
+                amount += subfields[i].getAmountOfFields(dimension);
+            }
+            return amount;
+        } else {
+            return 0;
+        }
+    }
+
     private FieldTree peek(int size) {
         if (DIMENSION == size && this.status.getValue() < STATUS_PROCESSING) {
             return this;
@@ -205,7 +260,7 @@ public class FieldTree {
         }
     }
 
-    private boolean hasFreeDimension(int dimension) {
+    public boolean hasFreeDimension(int dimension) {
         if (this.status == STATUS.COMPLETE) {
             return false;
         }
@@ -274,17 +329,13 @@ public class FieldTree {
         return number % 2 == 0;
     }
 
-    public static void main(String args[]) {
-        FieldTree tree = new FieldTree(0, 0, 16, 64);
-        FieldTree t2 = new FieldTree(0, 0, 16, 32);
-        t2.subfields[0].complete();
-
-        tree.setField(t2);
+    public static void main(String[] args) {
+        FieldTree tree = new FieldTree(0, 0, 16, 32);
+        System.out.println(tree.toString());
+        tree.pollField(16);
         System.out.println(tree.toString());
 
-        //for (int i = 0; i < 16; i++) {
-        //    tree.poll(CHUNK_SIZE);
-        //}
-        //System.out.println(tree.toString());
+//        System.out.println(tree.getAmountOfFields(16));
+        System.out.println(tree.getRemainingAmountOfFields(16));
     }
 }
