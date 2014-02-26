@@ -6,10 +6,23 @@
 
 package worker.job;
 
+import worker.job.scout.JobScout;
+
 /**
  *
  * @author Chingo
  */
 public class JobFactory {
+  
+  public enum JOB {
+    SCOUT
+  }
     
+  public Job getJob(JOB job) {
+    switch (job) {
+      case SCOUT: return new JobScout();
+      default: throw new UnsupportedOperationException();
+    }
+  }
+  
 }

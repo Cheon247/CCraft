@@ -1,4 +1,4 @@
-package ccnpcs.event.npc;
+package peasant.event.npc;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,9 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import ccnpcs.event.npc.NPCDamagedAnEntityEvent;
-import ccnpcs.event.npc.NPCKillEvent;
-import ccnpcs.event.npc.NPCTargetChangedEvent;
+import peasant.event.npc.NPCDamagedAnEntityEvent;
+import peasant.event.npc.NPCKillEvent;
+import peasant.event.npc.NPCTargetChangedEvent;
 
 import util.debug.Debug;
 

@@ -12,9 +12,7 @@ import net.citizensnpcs.api.npc.NPC;
  *
  * @author Chingo
  */
-class Worker {
-
+public class Worker {
     public Worker(NPC npc, String job) {
-    }
-    
+    }    
 }

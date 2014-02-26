@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package ccnpcs.util.movement;
+package peasant.util.movement;
 
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;

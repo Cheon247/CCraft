@@ -4,44 +4,30 @@
  * and open the template in the editor.
  */
 
-package ccnpcs.event.npc;
+package peasant.event.npc;
 
-import java.util.List;
 import net.citizensnpcs.api.event.NPCEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 /**
- *  Called when an npc kills an entity
+ *
  * @author Chingo
  */
-public class NPCKillEvent extends NPCEvent  {
-    private final Entity victim;
-    private final int droppedExp;
-    private final List<ItemStack> drops;
+public class NPCDamagedAnEntityEvent extends NPCEvent {
     
-    public NPCKillEvent(NPC killer, Entity victim, int droppedExp, List<ItemStack> drops) {
-        super(killer);
-        
+    private final Entity victim;
+    
+    public NPCDamagedAnEntityEvent(NPC damagerDealer, Entity victim) {
+        super(damagerDealer);
         this.victim = victim;
-        this.droppedExp = droppedExp;
-        this.drops = drops;
     }
 
     public Entity getVictim() {
         return victim;
     }
 
-    public int getDroppedExp() {
-        return droppedExp;
-    }
-
-    public List<ItemStack> getDrops() {
-        return drops;
-    }
-    
     @Override
     public HandlerList getHandlers() {
         return handlers;

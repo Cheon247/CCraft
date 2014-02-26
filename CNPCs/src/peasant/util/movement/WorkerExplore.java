@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ccnpcs.util.movement;
+package peasant.util.movement;
 
 import java.util.HashMap;
 import java.util.Map;

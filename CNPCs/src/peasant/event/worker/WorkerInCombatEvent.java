@@ -1,4 +1,4 @@
-package ccnpcs.event.worker;
+package peasant.event.worker;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
