@@ -8,6 +8,8 @@ package worker.worker;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
+import worker.job.Job;
+import worker.job.JobFactory;
 
 /**
  *
@@ -15,10 +17,11 @@ import net.citizensnpcs.api.util.DataKey;
  */
 public class WorkerTrait extends Trait {
 
-    private Worker worker;
     
-    @Persist("jobname")
-    private String job;
+    @Persist("peasant_job")
+    private String jobName;
+
+    private Job job;
 
     public WorkerTrait() {
         super("worker");
@@ -26,31 +29,33 @@ public class WorkerTrait extends Trait {
 
     @Override
     public void load(DataKey key) {
-//        job = key.getString("jobname");
+        this.jobName = key.getString("peasant_job");
+        this.job = JobFactory.getJob(JobFactory.JOB.valueOf(jobName));
     }
 
     // Save settings for this NPC (optional). These values will be persisted to the Citizens saves file
     @Override
     public void save(DataKey key) {
-//        key.setString("jobname", job);
+        key.setString("peasant_job", jobName);
     }
 
     @Override
     public void onSpawn() {
-        if (job != null) {
-            this.worker = new Worker(npc, job);
+        if (jobName != null) {
+            this.job = JobFactory.getJob(JobFactory.JOB.valueOf(jobName));
+            this.job.defaultAction();
+        } else {
+            this.job = JobFactory.getJob(JobFactory.JOB.IDLE);
         }
     }
 
     @Override
     public void onAttach() {
-        this.worker = new Worker(npc, job);
+        if(this.jobName == null)
+        this.job = JobFactory.getJob(JobFactory.JOB.IDLE);
     }
     
     
 
-    public Worker getWorker() {
-        return worker;
-    }
 
 }

@@ -12,12 +12,7 @@ import world.WorldDayCycleEvent;
  *
  * @author Chingo
  */
-public abstract class Job {
-    private final String name;
-
-    public Job(String name) {
-      this.name = name;
-    }
+public interface Job {
   
     public abstract void defaultAction();
     public abstract void onStateChanged();

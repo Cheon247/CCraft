@@ -13,21 +13,23 @@ import world.WorldDayCycleEvent;
  *
  * @author Christian
  */
-public class JobVillageElder extends Job {
+public class JobVillageElder implements Job {
 
   public JobVillageElder() {
-    super("village elder");
   }
+
 
   @Override
   public void defaultAction() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+
   @Override
   public void onStateChanged() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
 
   @Override
   public void onTimeChangeEvent(WorldDayCycleEvent wdce) {

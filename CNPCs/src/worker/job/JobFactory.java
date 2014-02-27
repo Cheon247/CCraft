@@ -6,6 +6,8 @@
 
 package worker.job;
 
+import worker.job.elder.JobVillageElder;
+import worker.job.idle.JobIdle;
 import worker.job.scout.JobScout;
 
 /**
@@ -15,13 +17,19 @@ import worker.job.scout.JobScout;
 public class JobFactory {
   
   public enum JOB {
-    SCOUT
+    SCOUT,
+    IDLE,
+    VILLAGE_ELDER
   }
+  
+  
     
-  public Job getJob(JOB job) {
+  public static Job getJob(JOB job) {
     switch (job) {
+      case IDLE : return new JobIdle();
       case SCOUT: return new JobScout();
-      default: throw new UnsupportedOperationException();
+      case VILLAGE_ELDER: return new JobVillageElder();
+      default: throw new UnsupportedOperationException(job.name() + ": not supported");
     }
   }
   
