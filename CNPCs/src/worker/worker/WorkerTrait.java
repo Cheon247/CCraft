@@ -12,7 +12,6 @@ import worker.job.Job;
 import worker.job.JobFactory;
 
 /**
- *
  * @author Chingo
  */
 public class WorkerTrait extends Trait {
