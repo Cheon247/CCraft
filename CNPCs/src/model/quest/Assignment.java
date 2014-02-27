@@ -5,16 +5,26 @@
  */
 package model.quest;
 
+import net.citizensnpcs.api.npc.NPC;
+
 /**
  *
  * @author Chingo
  */
-public abstract class Assignment {
+public class Assignment {
 
-    private Reward reward;
-    
-    public enum AssignmentType {
-        TREE_EXPLORATION,
-        GATHER_ASSIGNMENT // Search and Gather items (like seeds of melons or sugar canes);
+    /**
+     * The entity that made the assignment
+     */
+    private final NPC employer;
+
+    public Assignment(NPC employer) {
+        this.employer = employer;
     }
+
+    public NPC getEmployer() {
+        return employer;
+    }
+
+
 }

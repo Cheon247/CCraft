@@ -1,4 +1,4 @@
-package worker.job.elder.assignment.administration;
+package model.administration;
 
 /* 
  * To change this template file, choose Tools | Templates
@@ -11,6 +11,8 @@ package worker.job.elder.assignment.administration;
  * @author Chingo
  */
 public class FieldTree {
+    
+    
 
     private static final int STATUS_COMPLETE = 10;
     private static final int STATUS_PROCESSING = 5;
