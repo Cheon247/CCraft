@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy;
+package model.hierarchy.devisions.urban;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,25 +17,17 @@ import net.minecraft.util.com.google.common.base.Preconditions;
 public class Faction {
     
     
-    private final Kingdom kingdom;
+
     private final HashMap<String, Municipality> municipalities;
     private final String name;
     private final String id;
     
-    public Faction(String name, Kingdom kingdom) {
-        Preconditions.checkNotNull(kingdom);
+    public Faction(String name) {
         Preconditions.checkNotNull(name);
-        this.kingdom = kingdom;
         this.name = name;
         this.municipalities = new HashMap<>();
         this.id = UUID.randomUUID().toString();
     }
-    
-    
-    public Kingdom getKingdom() {
-        return kingdom;
-    }
-    
     
     public String getId() {
         return id;

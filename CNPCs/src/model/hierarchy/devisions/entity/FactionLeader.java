@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.Entity;
+package model.hierarchy.devisions.entity;
 
 /**
  *
  * @author Chingo
  */
-public class VillageElder {
+public class FactionLeader {
     
 }

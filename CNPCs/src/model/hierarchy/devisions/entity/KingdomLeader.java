@@ -4,19 +4,12 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy;
-
-import java.util.HashMap;
-import java.util.HashSet;
+package model.hierarchy.devisions.entity;
 
 /**
  *
  * @author Chingo
  */
-public class Universe {
-    
-    private HashMap<String,Kingdom> Kingdoms;
-    private HashSet<String> names;
-    
+public class KingdomLeader {
     
 }
