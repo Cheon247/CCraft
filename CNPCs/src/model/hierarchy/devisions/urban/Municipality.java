@@ -7,6 +7,8 @@ package model.hierarchy.devisions.urban;
 
 import java.util.HashMap;
 import java.util.UUID;
+import model.hierarchy.devisions.entity.Peasant;
+import model.profession.Profession;
 import org.bukkit.Location;
 
 /**
@@ -19,6 +21,7 @@ public abstract class Municipality {
   private final Location location;
   private final String id;
   private Faction faction;
+  private HashMap<Class<? extends Profession>, Peasant> inhabitants;
 
   public Municipality(Faction faction, Location location) {
     this.faction = faction;
