@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.devisions.entity;
+package model.devision;
 
 /**
  *
  * @author Chingo
  */
-public class KingdomLeader {
+public class Universe {
+    
+
     
 }

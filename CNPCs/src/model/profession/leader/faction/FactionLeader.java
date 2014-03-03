@@ -4,14 +4,12 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.devisions.urban;
+package model.profession.leader.faction;
 
 /**
  *
  * @author Chingo
  */
-public class Universe {
-    
-
+public class FactionLeader {
     
 }

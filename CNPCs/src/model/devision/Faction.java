@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.devisions.urban;
+package model.devision;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -18,7 +18,7 @@ public class Faction {
     
     
 
-    private final HashMap<String, Municipality> municipalities;
+    private final HashMap<String, Settlement> municipalities;
     private final String name;
     private final String id;
     
@@ -34,7 +34,7 @@ public class Faction {
     }
 
     
-    public boolean addMunicipality(Municipality municipality) {
+    public boolean addMunicipality(Settlement municipality) {
         if(municipalities.containsKey(municipality.getId())) {
             return false;
         } else {

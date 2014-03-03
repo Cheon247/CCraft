@@ -4,20 +4,21 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.devisions.entity;
+package model.profession.leader.settlement;
 
+import model.profession.Profession;
 import net.citizensnpcs.api.npc.NPC;
 
 /**
- * Peasants live in a Municipality
+ *
  * @author Chingo
  */
-public abstract class Peasant {
-    
-    private final NPC npc;
-    
-    public Peasant(NPC npc) {
-        this.npc = npc;
-    }
-    
+public class SettlementLeader extends Profession {
+
+  public SettlementLeader(String name, NPC npc) {
+    super(name, npc, true);
+  }
+
+  
+
 }

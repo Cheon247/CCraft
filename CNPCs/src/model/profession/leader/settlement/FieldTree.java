@@ -1,4 +1,4 @@
-package model.administration;
+package model.profession.leader.settlement;
 
 /* 
  * To change this template file, choose Tools | Templates

@@ -4,24 +4,17 @@
  * and open the template in the editor.
  */
 
-package model.profession;
+package model.profession.scout;
 
-import net.citizensnpcs.api.npc.NPC;
+import model.profession.leader.settlement.FieldTree;
 
 /**
  *
  * @author Christian
  */
-public class Scout extends Profession {
+class ExplorationAssignment {
 
-  public Scout(NPC npc) {
-    super("scout", npc);
+  public ExplorationAssignment(FieldTree tree, ExplorationType type) {
   }
-
-  @Override
-  public void handleCustomer(Profession customer) {
-    
-  }
-
   
 }

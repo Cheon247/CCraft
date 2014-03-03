@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package model.hierarchy.devisions.entity;
+package model.profession.leader.kingdom;
 
 /**
  *
  * @author Chingo
  */
-public class FactionLeader {
+public class KingdomLeader {
     
 }

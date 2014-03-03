@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.hierarchy.devisions.urban;
+package model.devision;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
-import model.hierarchy.devisions.entity.Peasant;
 import model.profession.Profession;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 
 /**
@@ -16,17 +17,18 @@ import org.bukkit.Location;
  *
  * @author Chingo
  */
-public abstract class Municipality {
+public abstract class Settlement {
 
   private final Location location;
   private final String id;
   private Faction faction;
-  private HashMap<Class<? extends Profession>, Peasant> inhabitants;
+  private final HashMap<Class <? extends Profession>, Set<NPC>> inhabitants;
 
-  public Municipality(Faction faction, Location location) {
+  public Settlement(Faction faction, Location location) {
     this.faction = faction;
     this.location = location;
     this.id = UUID.randomUUID().toString();
+    this.inhabitants = new HashMap<>();
   }
 
   public String getId() {
