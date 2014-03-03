@@ -14,8 +14,13 @@ import net.citizensnpcs.api.npc.NPC;
  */
 public class Scout extends Profession {
 
-  public Scout(String name, NPC npc) {
-    super(name, npc);
+  public Scout(NPC npc) {
+    super("scout", npc);
+  }
+
+  @Override
+  public void handleCustomer(Profession customer) {
+    
   }
 
   

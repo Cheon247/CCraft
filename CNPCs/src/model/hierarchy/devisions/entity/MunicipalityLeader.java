@@ -7,7 +7,9 @@
 package model.hierarchy.devisions.entity;
 
 import model.profession.Profession;
+import model.profession.Scout;
 import net.citizensnpcs.api.npc.NPC;
+import util.debug.Debug;
 
 /**
  *
@@ -17,5 +19,18 @@ public class MunicipalityLeader extends Profession {
 
   public MunicipalityLeader(String name, NPC npc) {
     super(name, npc);
+  }
+
+  @Override
+  protected void handleCustomer(Profession customer) {
+    if(customer instanceof Scout) {
+      
+    } else {
+      Debug.info(customer.getName() + ": not supported ");
+    }
+  }
+  
+  private void handleScout(Scout scout) {
+    
   }
 }
