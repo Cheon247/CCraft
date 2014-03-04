@@ -4,9 +4,10 @@
  * and open the template in the editor.
  */
 
-package model.profession.leader.settlement;
+package model.profession.devision.settlement;
 
 import model.profession.Profession;
+import model.profession.devision.contractor.scout.ScoutContractor;
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -14,11 +15,14 @@ import net.citizensnpcs.api.npc.NPC;
  * @author Chingo
  */
 public class SettlementLeader extends Profession {
-
-  public SettlementLeader(String name, NPC npc) {
-    super(name, npc, true);
+  private final ScoutContractor contractor;
+  
+  public SettlementLeader(NPC npc) {
+    super("Settlement Leader", npc, true);
+    this.contractor = new ScoutContractor(npc);
   }
 
+  
   
 
 }

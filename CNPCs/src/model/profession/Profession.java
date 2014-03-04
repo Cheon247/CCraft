@@ -12,15 +12,16 @@ import net.citizensnpcs.api.npc.NPC;
  * @author Chingo
  */
 public abstract class Profession {
+  
+  
 
   private final String name;
   private final boolean isUnique;
-  private final NPC npc;
+  
 
   public Profession(String name, NPC npc, boolean isUnique) {
     this.name = name;
     this.isUnique = isUnique;
-    this.npc = npc;
   }
 
   public String getName() {
@@ -30,9 +31,4 @@ public abstract class Profession {
   public boolean isIsUnique() {
     return isUnique;
   }
-
-  public NPC getNpc() {
-    return npc;
-  }
-
 }
