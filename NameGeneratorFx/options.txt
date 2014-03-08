@@ -1,0 +1,157 @@
+afk	Afrikaans
+afr	African
+aka	Akan
+alb	Albanian
+alg	Algonquin
+ame	Native American
+amh	Amharic
+anci	Ancient
+apa	Apache
+ara	Arabic
+arm	Armenian
+astr	Astronomy
+aus	Indigenous Australian
+aym	Aymara
+aze	Azerbaijani
+bas	Basque
+ben	Bengali
+ber	Berber
+bibl	Biblical (All)
+bos	Bosnian
+bre	Breton
+bul	Bulgarian
+cat	Catalan
+cela	Ancient Celtic
+celm	Celtic Mythology
+chi	Chinese
+cht	Choctaw
+com	Comanche
+cop	Coptic
+cor	Cornish
+cre	Cree
+cro	Croatian
+crs	Corsican
+cze	Czech
+dan	Danish
+dut	Dutch
+eng	English
+esp	Esperanto
+est	Estonian
+ewe	Ewe
+fairy	Fairy
+fil	Filipino
+fin	Finnish
+fle	Flemish
+fre	French
+fri	Frisian
+gal	Galician
+gan	Ganda
+geo	Georgian
+ger	German
+goth	Goth
+gre	Greek
+grea	Ancient Greek
+grem	Greek Mythology
+grn	Greenlandic
+haw	Hawaiian
+hb	Hillbilly
+hippy	Hippy
+hist	History
+hun	Hungarian
+ibi	Ibibio
+ice	Icelandic
+igb	Igbo
+ind	Indian
+indm	Indian Mythology
+ins	Indonesian
+inu	Inuit
+ira	Iranian
+iri	Irish
+iro	Iroquois
+ita	Italian
+jap	Japanese
+jew	Jewish
+kaz	Kazakh
+khm	Khmer
+kik	Kikuyu
+kk	Kreatyve
+kor	Korean
+kur	Kurdish
+kyr	Kyrgyz
+lat	Latvian
+lim	Limburgish
+lite	Literature
+lth	Lithuanian
+luh	Luhya
+luo	Luo
+mac	Macedonian
+mal	Maltese
+man	Manx
+mao	Maori
+map	Mapuche
+may	Mayan
+medi	Medieval
+mon	Mongolian
+morm	Mormon
+mwe	Mwera
+myth	Mythology
+nah	Nahuatl
+nav	Navajo
+nde	Ndebele
+nor	Norwegian
+nuu	Nuu-chah-nulth
+occ	Occitan
+oji	Ojibwe
+pac	Pacific/Polynesian
+pak	Pakistani
+pets	Pet
+pol	Polish
+popu	Popular Culture
+por	Portuguese
+pun	Punjabi
+que	Quechua
+rap	Rapper
+rmn	Romanian
+roma	Ancient Roman
+romm	Roman Mythology
+rus	Russian
+sam	Sami
+sca	Scandinavian
+scam	Norse Mythology
+sco	Scottish
+ser	Serbian
+sha	Shawnee
+sho	Shona
+sio	Sioux
+slam	Norse Mythology
+slk	Slovak
+sln	Slovene
+sot	Sotho
+spa	Spanish
+swa	Swahili
+swe	Swedish
+tag	Tagalog
+tam	Tamil
+tel	Telugu
+teua	Ancient Germanic
+tha	Thai
+theo	Theology
+tib	Tibetan
+trans	Transformer
+tsw	Tswana
+tum	Tumbuka
+tup	Tupí
+tur	Turkish
+ukr	Ukrainian
+urd	Urdu
+usa	American
+vari	Various
+vie	Vietnamese
+wel	Welsh
+witch	Witch
+wrest	Wrestler
+xho	Xhosa
+yao	Yao
+yor	Yoruba
+zap	Zapotec
+zul	Zulu
