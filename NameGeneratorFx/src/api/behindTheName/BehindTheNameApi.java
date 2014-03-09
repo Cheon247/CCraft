@@ -47,6 +47,11 @@ public class BehindTheNameApi implements PeopleNameApi {
         genres = NameReader.load();
     }
 
+    public static HashMap<String,String> getGenres() {
+        return new HashMap<>(genres);
+    }
+    
+    @Override
     public void Search(final PeopleNameOption option, ProgressCallback callback) {
         Search(new HashSet<>(), 0, option, callback);
     }

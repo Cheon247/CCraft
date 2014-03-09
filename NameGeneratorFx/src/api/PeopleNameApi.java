@@ -8,6 +8,7 @@ package api;
 
 import api.behindTheName.PeopleNameOption;
 import java.util.Set;
+import model.ProgressCallback;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface PeopleNameApi {
     
     public Set<String> getPeopleOptions();
     public boolean supports(PeopleNameOption option);
-    
+    public void Search(final PeopleNameOption option, ProgressCallback callback);
 }

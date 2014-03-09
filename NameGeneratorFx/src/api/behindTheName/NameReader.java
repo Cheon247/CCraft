@@ -31,6 +31,7 @@ class NameReader {
         try {
             List<String> lines = FileUtils.readLines(file);
             for(String s : lines) {
+                if(s.contains("#")) continue;
                 String htk = s.split("\\s")[0];
                 String cntry = s.substring(htk.length()+1);
                 data.put(cntry, htk);
