@@ -16,11 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -152,11 +149,17 @@ public class MainController implements Initializable {
     private TreeSet<String> getSurNames(Set<String> data) {
         TreeSet<String> names = new TreeSet<>();
         for (String s : data) {
+            if(!validSurname(s)) continue;
             if (s.split("\\s+").length >= 2) {
                 names.add(s.substring(s.split("\\s+")[0].length()));
             }
         }
         return names;
     }
+    
+    private boolean validSurname(String s) {
+        return (s.matches("(.*\\d*.*)") && s.replaceAll("\\s+", "").matches("\\w+")); 
+    }
+    
 
 }
