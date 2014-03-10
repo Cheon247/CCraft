@@ -8,6 +8,7 @@ package api;
 
 import api.behindTheName.PeopleNameOption;
 import java.util.Set;
+import javafx.scene.control.ProgressBar;
 import model.ProgressCallback;
 
 /**

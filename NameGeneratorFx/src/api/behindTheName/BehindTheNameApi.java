@@ -58,8 +58,6 @@ public class BehindTheNameApi implements PeopleNameApi {
 
     private void Search(final HashSet<String> set, int counter, final PeopleNameOption option, final ProgressCallback callback) {
         final int c = counter;
-
-        System.out.println("Counter: " + counter);
         callback.onProgressUpdate(behindTheNameProgressValues[c]);
         if(!set.isEmpty()) callback.onProgress(new TreeSet<>(set));
         
@@ -79,7 +77,6 @@ public class BehindTheNameApi implements PeopleNameApi {
                     List<String> lines = FileUtils.readLines(file);
                     for (String s : lines) {
                         if (s.contains("<name>")) {
-                            System.out.println(s);
                             s = s.substring(s.indexOf(">") + 1, s.lastIndexOf("</"));
                             set.add(s);
                         }

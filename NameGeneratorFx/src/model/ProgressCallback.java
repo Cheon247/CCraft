@@ -14,6 +14,6 @@ import java.util.TreeSet;
  */
 public interface ProgressCallback {
     
-    public void onProgressUpdate(float progress);
+    public void onProgressUpdate(double progress);
     public void onProgress(TreeSet<String> result);
 }
